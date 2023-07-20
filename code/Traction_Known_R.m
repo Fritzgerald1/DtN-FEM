@@ -1,7 +1,7 @@
 function [ F,U_in ] = Traction_Known_R( Nnode,mode_in,f,CT1,CT2,he,Coordinate,Ielement,root,Kg,W,dW,dL,L_nod_s,L_nod_d,Amp,bnd_401_e,bnd_501_e,mu1,mu2 )
 % 101,401,501 boundary  (incident component Kg*U_in)
 U_in=zeros(Nnode,1);
-F=zeros(2*Nnode,1);
+F=zeros(Nnode,1);
 for j = 1:Nnode
     kh = root(1,mode_in);
     kth1 = 2*pi*f/CT1*he;
@@ -13,9 +13,8 @@ for j = 1:Nnode
     else
         i_layer = 2;
     end
-    [ z_um,zderiv_um] = Lamb_mode(mode_in,Amp,i_layer,kth1,kth2,kh,x,y,1,0);
-    U_in(2*j-1,1) = z_um;
-	U_in(2*j,1) = z_um;
+    [ z_um,zderiv_um ] = SH_mode(mode_in,Amp,i_layer,kth1,kth2,kh,x,y,1,0);
+    U_in(j,1) = z_um;
 end
 
 F = F-Kg*U_in;
@@ -32,7 +31,7 @@ for j = 1:size(bnd_401_e,2)
     else
         i_layer = 2;
         mu = mu2/mu1;
-	end
+    end 
     xs(1,1) = Coordinate(Ielement(indx_e,4),1);
     xs(1,2) = Coordinate(Ielement(indx_e,4),2);
     xs(2,1) = Coordinate(Ielement(indx_e,8),1);

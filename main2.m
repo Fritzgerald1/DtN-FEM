@@ -50,15 +50,17 @@ Fun = @lamb_sym;
 [RealK,Omega,t] = get_wavenumber(w_sca,Fun);
 root = RealK;
 
+CT1 = sqrt(mu1/density1);
+[ root,root_d,zamp_mode,Amp ] = Lamb_dispersion( mu1,mu1,density1,density1,f,he );
 
-Amp = zeros(2,t);
-for ii = 1:t
-	Amp(:,ii) = get_amp(Omega(ii),RealK(ii));
-end
+% Amp = zeros(2,t);
+% for ii = 1:t
+% 	Amp(:,ii) = get_amp(Omega(ii),RealK(ii));
+% end
 
 %% Traction_Known_R (-Kg*U_in+t_401_in+t_501_in)
-% [ F,U_in ] = Traction_Known_R( Nnode,mode_in,f,CT1,CT2,he,Coordinate,Ielement,root,Kg,W,dW,dL,L_nod_s,L_nod_d,Amp,bnd_401_e,bnd_501_e,mu1,mu2 );
-[ F,U_in ] = Traction_Known_R( Nnode,mode_in,f,CT1,he,Coordinate,Ielement,root,Kg,W,dW,dL,L_nod_s,L_nod_d,Amp,bnd_401_e,bnd_501_e,mu1 );
+[ F,U_in ] = Traction_Known_R( Nnode,mode_in,f,CT1,CT1,he,Coordinate,Ielement,root,Kg,W,dW,dL,L_nod_s,L_nod_d,Amp,bnd_401_e,bnd_501_e,mu1,mu1 );
+% [ F,U_in ] = Traction_Known_R( Nnode,mode_in,f,CT1,he,Coordinate,Ielement,root,Kg,W,dW,dL,L_nod_s,L_nod_d,Amp,bnd_401_e,bnd_501_e,mu1 );
 
 %% UnKnown Traction (left hand side)
 [ Kg,zint_inv ] = Traction_scatter_401_501( bnd_401,bnd_501,bnd_401_e,bnd_501_e,root,f,CT1,CT2,he,mu1,mu2,Coordinate,Ielement,dW,Amp,Kg );
