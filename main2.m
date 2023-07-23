@@ -5,14 +5,16 @@
 % mu:shear modulus %
 % Cf:cicular frequency %
 %% Aluminum
-density1=2.7*10^3;
-mu1=26.1*10^9;
-h=0.001;
-he = 0.5*10^(-3); % 半板厚
+density1 = 2.7*10^3; 
+mu1 = 26.1*10^9; 
+CT = 3.13e3; % 剪切波速
+% CT = sqrt(mu1/density1); 
+d = 1e-3; % 板厚
+h = d/2;
 
-%% 2MHz的A0模态入射
-f = 2*10^6; % 入射频率
-Cf = 2*pi*f;
+%% A0模态入射
+f = 1.5*10^6; % 入射频率
+cf = 2*pi*f;
 mode_in = 2; 
 
 %% Geometry Setting
@@ -31,39 +33,26 @@ L_ele = round(L/dL);
 L_nod_s = 2*L_ele+1;
 L_nod_d = L_ele+1;
 
-Coordinate = Coordinate/he;
-
 %% Stiffness matrix
-% ngq:integration points, total integration points is 8*8 %
-% xgq:si or ti, wgq:wi or wj %
 % K: global stiffness matrix %
 % M: global mass matrix %
-% Ke: local stiffness matrix, Me: local Mass matrix %
+% Kg: Dynamic Stiffness Matrix
+[Kg] = Stiffness_Mass_matrix( Nnode,Nelement,Ielement,Coordinate,density1,mu1,cf);
 
-% [ Kg,K,M ] = Stiffness_Mass_matrix(Nnode,Nelement,Ielement,Coordinate,mu1,h,density1,he,Cf);
-% Kg = Stiffness(Cf);
-Kg = ReadStiffness(Cf,mu1);
 %% Lamb dispersion
-CT1 = sqrt(mu1/density1);
-w_sca = Cf/CT1*h;
-Fun = @lamb_sym;
-[RealK,Omega,t] = get_wavenumber(w_sca,Fun);
-root = RealK;
+w_sca = cf/CT*h; % 无量纲频率
+Fun = @lamb;
+[root,~,modes] = get_wavenumber(w_sca,Fun); % 得到无量纲波数和模态个数
+[zamp_mode,Amp] = get_amplitude( root,w_sca,h,Fun );
+% [zamp_mode,Amp] = Lamb_dispersion( mu1,density1,f,he,root,w_sca);
 
-CT1 = sqrt(mu1/density1);
-[ root,root_d,zamp_mode,Amp ] = Lamb_dispersion( mu1,mu1,density1,density1,f,he );
-
-% Amp = zeros(2,t);
-% for ii = 1:t
-% 	Amp(:,ii) = get_amp(Omega(ii),RealK(ii));
-% end
 
 %% Traction_Known_R (-Kg*U_in+t_401_in+t_501_in)
-[ F,U_in ] = Traction_Known_R( Nnode,mode_in,f,CT1,CT1,he,Coordinate,Ielement,root,Kg,W,dW,dL,L_nod_s,L_nod_d,Amp,bnd_401_e,bnd_501_e,mu1,mu1 );
+[ F,U_in ] = Traction_Known_R( Nnode,mode_in,f,CT,CT,h,Coordinate,Ielement,root,Kg,W,dW,dL,L_nod_s,L_nod_d,Amp,bnd_401_e,bnd_501_e,mu1,mu1 );
 % [ F,U_in ] = Traction_Known_R( Nnode,mode_in,f,CT1,he,Coordinate,Ielement,root,Kg,W,dW,dL,L_nod_s,L_nod_d,Amp,bnd_401_e,bnd_501_e,mu1 );
 
 %% UnKnown Traction (left hand side)
-[ Kg,zint_inv ] = Traction_scatter_401_501( bnd_401,bnd_501,bnd_401_e,bnd_501_e,root,f,CT1,CT2,he,mu1,mu2,Coordinate,Ielement,dW,Amp,Kg );
+[ Kg,zint_inv ] = Traction_scatter_401_501( bnd_401,bnd_501,bnd_401_e,bnd_501_e,root,f,CT,CT2,h,mu1,mu1,Coordinate,Ielement,dW,Amp,Kg );
 
 U_sc = Kg\F;
 
@@ -79,4 +68,4 @@ end
 
 %% Re & Tr coefficients
 n_mode_max = size(root,2);
-[ Re,Tr,eng_R,eng_T ] = Co_Eng_RaT( n_mode_max,mode_in,bnd_401_e,bnd_501_e,Coordinate,Ielement,root,f,CT1,CT2,mu1,mu2,he,dW,Amp,zint_inv,U_sc );
+[ Re,Tr,eng_R,eng_T ] = Co_Eng_RaT( n_mode_max,mode_in,bnd_401_e,bnd_501_e,Coordinate,Ielement,root,f,CT,CT,mu1,mu1,h,dW,Amp,zint_inv,U_sc );

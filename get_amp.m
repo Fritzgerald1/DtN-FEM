@@ -2,25 +2,39 @@ function [V] = get_amp(kd,wd)
 %% 材料属性
 CL = 6.35;
 CT = 3.13;
-h=0.5;
+h = 0.5;
 mu = 26;
+lambda = 51;
 
 %% 量纲还原
 k = kd/h;
 w = wd*CT/h;
-p = sqrt(w.^2/CL^2 - k.^2);
-q = sqrt(w.^2/CT^2 - k.^2);
+KL = sqrt(w.^2/CL^2 - k.^2);
+KT = sqrt(w.^2/CT^2 - k.^2);
 
 %% 频散方程
-M(1,1) = mu*(-2i*k*p*sin(p*h));
-M(1,2) = mu*((k^2-q^2)*sin(q*h));
-M(2,1) = -mu*((q^2-k^2)*cos(p*h));
-M(2,2) = -2*mu*1i*k*q*cos(q*h);
-[Val,~] = eig(M);
-V = Val(:,1);
-% 
-% [L,U] = lu(M);
-% z = [1;0];
-% V = U\(L\z);
+M(1,1) = -2*mu*k*KL*exp(1i*KL*h);
+M(1,2) = 2*mu*k*KL*exp(-1i*KL*h);
+M(1,3) = mu*(KT^2-k^2)*exp(1i*KT*h);
+M(1,4) = mu*(KT^2-k^2)*exp(-1i*KT*h);
+M(2,1) = -mu*(KT^2-k^2)*exp(1i*KL*h);
+M(2,2) = -mu*(KT^2-k^2)*exp(-1i*KL*h);
+% M(2,1) = (-lambda*(w/CL)^2-2*mu*KL^2)*exp(1i*KL*h);
+% M(2,2) = (-lambda*(w/CL)^2-2*mu*KL^2)*exp(-1i*KL*h);
+M(2,3) = -2*mu*k*KT*exp(1i*KT*h);
+M(2,4) = 2*mu*k*KT*exp(-1i*KT*h);
+M(3,1) = -2*mu*k*KL*exp(-1i*KL*h);
+M(3,2) = 2*mu*k*KL*exp(1i*KL*h);
+M(3,3) = mu*(KT^2-k^2)*exp(-1i*KT*h);
+M(3,4) = mu*(KT^2-k^2)*exp(1i*KT*h);
+M(4,1) = -mu*(KT^2-k^2)*exp(-1i*KL*h);
+M(4,2) = -mu*(KT^2-k^2)*exp(1i*KL*h);
+% M(4,1) = (-lambda*(w/CL)^2-2*mu*p^2)*exp(-1i*p*h);
+% M(4,2) = (-lambda*(w/CL)^2-2*mu*p^2)*exp(1i*p*h);
+M(4,3) = -2*mu*k*KT*exp(-1i*KT*h);
+M(4,4) = 2*mu*k*KT*exp(1i*KT*h);
+
+V = null(M,1e-2);
+V = V(:,1)/V(1,1);
 
 end

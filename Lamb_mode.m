@@ -1,4 +1,4 @@
-function [ z_um,zderiv_um ] = SH_mode(m,Amp,i_layer,kth1,kth2,kh,x1,x2,i_pm,i_conj)
+function [ z_um,zderiv_um ] = Lamb_mode(m,Amp,i_layer,kth1,kth2,kh,x1,x2,i_pm,i_conj)
 %SH_MODE 此处显示有关此函数的摘要
 %   i_pm = 1(positive direction), -1(negative direction)
 he= 5*10^(-4);

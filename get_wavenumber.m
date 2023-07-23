@@ -15,39 +15,38 @@ Omega = [];
 t=0;
 
 %% 搜索波数解的范围
-Ary = -1e-2;
-Bry = 7;
-dry = 1e-2;
-
+Ay = 1e-3;
+By = 10;
+dy = 1e-3;
 
 %% 搜索波数解
-parfor ii = 1:numel(w_sca) % 扫描频率的区间
+for ii = 1:numel(w_sca) % 扫描频率的区间
 	aw = w_sca(ii);
-	for  ary = Ary:10*dry:Bry % 搜索波数解实部的范围
+	for  ay = Ay:5*dy:By % 搜索波数解实部的范围
 		s1=inf;
-		sw=0;
-		sry=0;
-		bry = ary+11*dry; % 搜索范围的实部右边界
+		sw1=0;
+		sy1=0;
+		by = ay+6*dy; % 搜索范围的右边界
 		%% 在小网格里，找到极小值解(syr1,siy1,sw1)
-		for ry1 = ary:dry:bry
-			y1 = ry1;
+		for y1 = ay:dy:by
 			h1 = Fun(y1,aw); % 频散方程行列式
 			hh1 = abs(h1);
 			if hh1 < s1
 				s1 = hh1;
-				sw = aw;
-				sry = ry1;
+				sw1 = aw;
+				sy1 = y1;
 			end
 		end
 
-		if (abs(sry-ary)>0.1*dry) && (abs(sry-bry)>0.1*dry) % 不在外边界上
+		if (abs(sy1-ay)>0.1*dy) && (abs(sy1-by)>0.1*dy) % 不在外边界上
 			%% 当极小值不在边界时，判断该点是否是零点
-			[zsy,zero_flag]=Determine_zero_point(sry,sw,dry,Fun); % 判断零点，ssy1为每次迭代的解
+			[true_sy,zero_flag]=Determine_zero_point(sy1,sw1,dy,Fun); % 判断零点，ssy1为每次迭代的解
 			if zero_flag == 1 % 该点是零点
-				Omega=[Omega sw];
-				RealK=[RealK zsy];
+				Omega=[Omega sw1];
+				RealK=[RealK true_sy];
 				t=t+1;
 			end
 		end
 	end
+end
 end

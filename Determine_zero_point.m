@@ -10,8 +10,8 @@ zpr = [];
 zero_flag = 0;
 Detmin=inf;
 sry = 0;
-iter = 10;% 迭代次数
-step = 2;% 将子区间[yy-ty,yy+ty]划分为2*{step}份
+iter = 40;% 迭代次数
+step = 5;% 将子区间[yy-ty,yy+ty]划分为2*{step}份
 DetF=zeros(1,iter);
 ssry1=zeros(1,iter);
 
