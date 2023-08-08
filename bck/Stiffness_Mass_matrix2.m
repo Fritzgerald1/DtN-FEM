@@ -1,4 +1,4 @@
-function [Kg] = Stiffness_Mass_matrix( Nnode,Nelement,Ielement,Coordinate,density,mu,cf)
+function [Kg,K,M] = Stiffness_Mass_matrix( Nnode,Nelement,Ielement,Coordinate,density,mu,Cf)
 E = 70e9;
 v = 0.33;
 K = zeros(2*Nnode,2*Nnode);
@@ -8,10 +8,10 @@ M1 = zeros(16,16,Nelement);
 
 for i1=1:Nelement
 	x1 = Coordinate(Ielement(i1,1),1); y1 = Coordinate(Ielement(i1,1),2);
-	x2 = Coordinate(Ielement(i1,2),1); y2 = Coordinate(Ielement(i1,2),2);
-	x3 = Coordinate(Ielement(i1,3),1); y3 = Coordinate(Ielement(i1,3),2);
-	x4 = Coordinate(Ielement(i1,4),1); y4 = Coordinate(Ielement(i1,4),2);
-	[Ke,Me] = Ksolve(E,v,x1,y1,x2,y2,x3,y3,x4,y4);
+	x3 = Coordinate(Ielement(i1,2),1); y3 = Coordinate(Ielement(i1,2),2);
+	x5 = Coordinate(Ielement(i1,3),1); y5 = Coordinate(Ielement(i1,3),2);
+	x7 = Coordinate(Ielement(i1,4),1); y7 = Coordinate(Ielement(i1,4),2);
+	[Ke,Me] = Ksolve(E,v,x1,y1,x3,y3,x5,y5,x7,y7);
 	Kr = Ke;
 	Mr = density*Me;
 	for j=1:16
@@ -32,5 +32,5 @@ for i1 = 1:Nelement
 	end
 end
 
-Kg = (K-cf^2*M)/mu;
+Kg = (K-Cf^2*M)/mu;
 end

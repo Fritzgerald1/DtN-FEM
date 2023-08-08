@@ -4,7 +4,13 @@
 % h:unit length of x3 direction %
 % mu:shear modulus %
 % Cf:cicular frequency %
-%% Aluminum
+
+%% 子文件夹路径
+addpath(genpath('.\import')); % 读入网格信息
+addpath(genpath('.\K')); % 形成刚度矩阵
+addpath(genpath('.\lamb')) % Lamb波波数、频率及幅值
+
+%% Aluminum材料参数
 density = 2.7*10^3; 
 mu = 26.1*10^9; 
 CT = 3.13e3; % 剪切波速

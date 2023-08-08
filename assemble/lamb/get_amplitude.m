@@ -10,6 +10,7 @@ for ii = 1:length(root)
     end
 end
 
+%{
 zamp_mode = Amp;
 for i = 1:length(root)
     kih = root(1,i);
@@ -19,4 +20,6 @@ for i = 1:length(root)
 %     pm(i,1)=Pm;
     Amp(:,i) = Amp(:,i)/sqrt(abs(Pm));
 end
+
+%}
 end

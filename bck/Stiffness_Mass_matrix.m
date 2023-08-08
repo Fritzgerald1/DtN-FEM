@@ -1,4 +1,4 @@
-function [Kg] = Stiffness_Mass_matrix( Nnode,Nelement,Ielement,Coordinate,density,mu,cf)
+function [Kg,K,M] = Stiffness_Mass_matrix( Nnode,Nelement,Ielement,Coordinate,density,mu,cf)
 E = 70e9;
 v = 0.33;
 K = zeros(2*Nnode,2*Nnode);
