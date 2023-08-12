@@ -34,9 +34,12 @@ function Ke = Elem801(E, nu,h)
         [nu 1 0]
         [0 0 (1- nu)/2]
         ];
+
+
     
     ke_pre = transpose(B)*D*B;  % 注意不能使用B'
     Ke = h * int(int(ke_pre,x,[-1, 1]), y, [-1,1]); % 积分得到刚度矩阵
     % 注意不能使用vpa函数, vpa函数会产生截断误差
+% 	Ke = double(Ke);
     clear ke_pre
 end

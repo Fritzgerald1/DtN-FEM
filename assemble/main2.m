@@ -53,7 +53,6 @@ Fun = @lamb;
 root = root(end:-1:1); % 按低阶到高阶排列
 [Amp] = get_amplitude( root,w_sca,h,Fun );
 
-
 %% Traction_Known_R (-Kg*U_in+t_401_in+t_501_in)
 [ F,U_in ] = Traction_Known_R( Nnode,mode_in,f,CT,CT,h,Coordinate,Ielement,root,Kg,W,dW,dL,L_nod_s,L_nod_d,Amp,bnd_401_e,bnd_501_e,mu,mu );
 % [ F,U_in ] = Traction_Known_R( Nnode,mode_in,f,CT1,he,Coordinate,Ielement,root,Kg,W,dW,dL,L_nod_s,L_nod_d,Amp,bnd_401_e,bnd_501_e,mu1 );

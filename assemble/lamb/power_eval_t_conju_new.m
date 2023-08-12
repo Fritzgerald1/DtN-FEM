@@ -25,7 +25,7 @@ end
 function [u1,u2,t11,t12,t22] = ut_lamb(x2)
 E = [exp(1i*p*x2) exp(-1i*p*x2) exp(1i*q*x2) exp(-1i*q*x2)];
 u1 =  E * diag([k, k, -q, q].*1i) * A ;
-u2 =  E * diag([p, -p k k].*1i) * A;
+u2 =  E * diag([p, -p k k].*1i) * A ;
 t11 = E * diag([mu*(2*p^2-q^2-k^2)*[1 1], 2*mu*q*k*[1 -1]]) * A;
 t12 = E * diag([2*mu*k*p*[-1 1], mu*(q^2-k^2)*[1 1]]) * A;
 t22 = E * diag([-mu*(q^2-k^2)*[1 1], -2*mu*k*q*[-1 1]]) * A;
