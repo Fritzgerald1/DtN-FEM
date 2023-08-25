@@ -23,14 +23,14 @@ v =  E * diag([p, -p k k].*1i) * A .* exp(1i*k*x);
 % u = imag(u); v = real(v);
 
 Ux = cos(alpha)*u + sin(alpha)*v;
-Uy = sin(alpha)*u + cos(alpha)*v;
+Uy = -sin(alpha)*u + cos(alpha)*v;
 
 t11 = E * diag([mu*(2*p^2-q^2-k^2)*[1 1], 2*mu*q*k*[1 -1]]) * A .* exp(1i*k*x) .*dy;
 t12 = E * diag([2*mu*k*p*[-1 1], mu*(q^2-k^2)*[1 1]]) * A .* exp(1i*k*x) .*dy;
 t22 = E * diag([-mu*(q^2-k^2)*[1 1], 2*mu*k*q*[-1 1]]) * A .* exp(1i*k*x) .*dy;
 % t11 = real(t11); t12 = imag(t12); t22 = real(t22); 
-tx = t11+t12;
-ty = t22+t12;
+tx = t11;
+ty = t12;
 
 % Mx = diag([1i*mu*k*(2*p^2-q^2-k^2-2*k*p), 1i*mu*k*(2*p^2-q^2-k^2+2*k*p), 1i*mu*k*(q^2-k^2+2*k*q), 1i*mu*k*(q^2-k^2-2*k*q)]);
 % My = diag([-1i*mu*p*(2*k*p+(q^2-k^2)), -1i*mu*p*(2*k*p-(q^2-k^2)), -1i*mu*q*(2*q*k-(q^2-k^2)),  1i*mu*q*(2*q*k+(q^2-k^2))]);
