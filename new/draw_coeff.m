@@ -3,20 +3,22 @@ clear h
 addpath("./output")
 cr = abs(cR);
 ct = abs(cT);
+h = 1e-3;
+ff1 = ff/CT*h*2*pi/pi*2;
 
 h(1) = figure(1);
-plot(ff,cr(1,:),'-o','Marker','.')
+plot(ff1,cr(1,:),'-o','Marker','.')
 hold on
-plot(ff,cr(2,:),'-o','Marker','.')
+plot(ff1,cr(2,:),'-o','Marker','.')
 legend('A','S')
 title('Reflection')
 hold off
 
 
 h(2) = figure(2);
-plot(ff,ct(1,:),'-o','Marker','.')
+plot(ff1,ct(1,:),'-o','Marker','.')
 hold on
-plot(ff,ct(2,:),'-o','Marker','.')
+plot(ff1,ct(2,:),'-o','Marker','.')
 hold off
 legend('A','S')
 title('Transmission')

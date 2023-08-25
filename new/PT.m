@@ -62,8 +62,22 @@ c_TR = coeff(modes+1:end)./c_inc;
 u = zeros(2*Nnode,1);
 u(l)=P_inc*c_inc+P_L*c_RE;
 u(r)=P_R*c_TR;
+
 u(u==0) = sol(1:end-2*modes);
 
+%% 能量检验
+uI = P_inc*c_inc;
+ul = P_L*c_RE;
+ur = P_R*c_TR;
+tI = T_inc*c_inc;
+tl = T_L*c_RE;
+tr = T_R*c_TR;
+
+eIN = sum(abs(uI.*tI));
+eOUT = sum(ur.*tr)+sum(ur.*tr);
+
+% energyIn = uI
+% energyOut = 
 %% 绘画出上表面的位移
 % top = sort([2*bnd_T-1;2*bnd_T]);
 % u_T = u(top);

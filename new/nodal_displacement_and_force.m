@@ -39,7 +39,7 @@ ty = t22+t12;
 % tx = real(tx); ty = real(ty);
 
 Tx = cos(alpha)*tx + sin(alpha)*ty;
-Ty = sin(alpha)*tx + cos(alpha)*ty;
+Ty = -sin(alpha)*tx + cos(alpha)*ty;
 
 % 合并x和y的位移/力
 tmpU = [Ux,Uy]';
@@ -49,7 +49,7 @@ tmpT = [Tx,Ty]';
 T = tmpT(:);
 
 %% 绘图检验
-%位移
+% 位移
 % figure
 % subplot(1,2,1)
 % [y1,I] = sort(y);

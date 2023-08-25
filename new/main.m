@@ -30,7 +30,7 @@ mode_in = 1; % A0模态入射
 %% 几何网格
 % Import Mesh Information %
 % bnd_401是左边界节点编号，bnd_501是右边界，bnd_101是自由应力边界（上下边界及缺陷边界） %
-[Nnode, Nelement, Coordinate, Ielement] = read_mesh_info("mesh_crack_tr.dat");
+[Nnode, Nelement, Coordinate, Ielement] = read_mesh_info("mesh_crack.dat");
 
 [bnd_L, bnd_R, bnd_T,bnd_B,bnd_free, bnd_L_e, bnd_R_e, bnd_free_e] = bound_information(Coordinate, Ielement);
 
