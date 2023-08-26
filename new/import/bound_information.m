@@ -1,8 +1,8 @@
 function [left, right, top ,bottom, freeBnd, left_e, right_e, freeBnd_e] = bound_information(Coordinate, Ielement)
 x = Coordinate(:,1);
 y = Coordinate(:,2);
-L=15*10^(-3);
-W=1*10^(-3);
+% L=15*10^(-3);
+% W=1*10^(-3);
 
 % L_crack = W;
 
@@ -10,12 +10,19 @@ W=1*10^(-3);
 left = find(x==0); % 左边界节点
 right = find(x==max(x)); % 右边界节点
 %%	自由应力节点由上/下/缺陷边界节点组成
-top = find(y==max(y) .* ~(x==0) .* ~(x==max(x))); % 上边界节点
-% top = find(y==max(y)); % 上边界节点
+% top = find(y==max(y) .* ~(x==0) .* ~(x==max(x))); % 上边界节点
+
+top = find(y==max(y)); % 上边界节点
+
 % crack = find((y==W/2) .* (x >= L/2-L_crack/2).*(x <= L/2+L_crack/2)); % 缺陷边界节点
 crack = [];
+
 bottom = find(y==min(y)); % 下边界节点
+
+
 freeBnd = [top;crack;bottom]; % 自由应力节点
+
+
 % freeBnd = [top; bottom];
 
 %% 边界单元
