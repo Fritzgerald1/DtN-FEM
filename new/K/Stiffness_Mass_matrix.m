@@ -1,15 +1,13 @@
 function [K,M] = Stiffness_Mass_matrix( Nnode,Nelement,Ielement,Coordinate,lambda,mu,density)
 E = mu*(2*mu+3*lambda)/(mu+lambda);
 v = lambda/(2*(mu+lambda));
-E = 70e9;
-v = 0.33;
 
 K = zeros(2*Nnode,2*Nnode);
 M = zeros(2*Nnode,2*Nnode);
 K1 = zeros(16,16,Nelement);
 M1 = zeros(16,16,Nelement);
 
-parfor i1=1:Nelement
+for i1=1:Nelement
 	x1 = Coordinate(Ielement(i1,1),1); y1 = Coordinate(Ielement(i1,1),2);
 	x2 = Coordinate(Ielement(i1,2),1); y2 = Coordinate(Ielement(i1,2),2);
 	x3 = Coordinate(Ielement(i1,3),1); y3 = Coordinate(Ielement(i1,3),2);
@@ -34,4 +32,6 @@ for i1 = 1:Nelement
 		end
 	end
 end
+K = sparse(K);
+M = sparse(M);
 end
