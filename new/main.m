@@ -1,10 +1,9 @@
-% clear
+clear
 % close all
 %% 子文件夹路径
 addpath('.\import'); % 读入网格信息
 addpath('.\K'); % 形成刚度矩阵
 addpath('.\lamb') % Lamb波波数、频率及幅值
-
 %% Aluminum材料参数
 density = 2.7*10^3;
 lambda = 51e9;
@@ -13,9 +12,9 @@ CL = sqrt((lambda+2*mu)/density); % 纵波波速
 CT = sqrt(mu/density); % 横波波速
 d = 1e-3; % 板厚
 h = d/2;
+%% 入射波设置
 mode_in = 1; % A0模态入射
-
-ff = 1e6;
+ff = 2e6;
 nff = length(ff);
 cR = zeros(2,nff);
 cT = zeros(2,nff);
@@ -25,12 +24,11 @@ cT = zeros(2,nff);
 [Nnode, Nelement, Coordinate, Ielement] = read_mesh_info("mesh.dat");
 [bnd_L, bnd_R, bnd_T,bnd_B,bnd_free, bnd_L_e, bnd_R_e, bnd_free_e] = bound_information(Coordinate, Ielement);
 %% 形成刚度矩阵
+tic % 计时开始
 [K,M] = Stiffness_Mass_matrix( Nnode,Nelement,Ielement,Coordinate,lambda,mu,density);
 K(abs(K)<1e-3)=0;
+toc % 计时结束
 
-% tmp=full(K)
-
-tic % 计时开始
 for tt = 1:nff
     %% 入射波
     f = ff(tt); % 入射频率
@@ -54,6 +52,7 @@ for tt = 1:nff
 
 end
 
+run("PT.m")
+
 % run('draw_coeff.m')
 
-% toc % 计时结束
