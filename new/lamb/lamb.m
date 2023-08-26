@@ -16,8 +16,6 @@ M(1,3) = mu*(KT^2-k^2)*exp(1i*KT*h);
 M(1,4) = mu*(KT^2-k^2)*exp(-1i*KT*h);
 M(2,1) = -mu*(KT^2-k^2)*exp(1i*KL*h);
 M(2,2) = -mu*(KT^2-k^2)*exp(-1i*KL*h);
-% M(2,1) = (-lambda*(w/CL)^2-2*mu*KL^2)*exp(1i*KL*h);
-% M(2,2) = (-lambda*(w/CL)^2-2*mu*KL^2)*exp(-1i*KL*h);
 M(2,3) = -2*mu*k*KT*exp(1i*KT*h);
 M(2,4) = 2*mu*k*KT*exp(-1i*KT*h);
 
@@ -27,8 +25,6 @@ M(3,3) = mu*(KT^2-k^2)*exp(-1i*KT*h);
 M(3,4) = mu*(KT^2-k^2)*exp(1i*KT*h);
 M(4,1) = -mu*(KT^2-k^2)*exp(-1i*KL*h);
 M(4,2) = -mu*(KT^2-k^2)*exp(1i*KL*h);
-% M(4,1) = (-lambda*(w/CL)^2-2*mu*p^2)*exp(-1i*p*h);
-% M(4,2) = (-lambda*(w/CL)^2-2*mu*p^2)*exp(1i*p*h);
 M(4,3) = -2*mu*k*KT*exp(-1i*KT*h);
 M(4,4) = 2*mu*k*KT*exp(1i*KT*h);
 
