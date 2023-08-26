@@ -12,7 +12,7 @@ bnd = bnd_L;
 P_L = zeros(2*length(bnd_L),modes);
 T_L = zeros(2*length(bnd_L),modes);
 for n = 1:modes	
-	[P_Ln,T_Ln] = nodal_displacement_and_force( wd,kd,n,Amp,bnd,Coordinate,lambda,mu,density,h,0 );
+	[P_Ln,T_Ln] = nodal_displacement_and_force( wd,kd,n,Amp,bnd,Coordinate,lambda,mu,density,h,180 );
 	P_L(:,n) = P_Ln;
 	T_L(:,n) = T_Ln;
 end
@@ -45,7 +45,7 @@ Ti = sparse(2*Nnode,1);
 [R,C] = size(T_inc);
 Ti(end-R+1:end,end-C+1:end) = T_inc;
 
-c_inc = 1e-6; % 令入射系数c_inc为1e-6
+c_inc = 1; % 令入射系数c_inc为1e-6
 F = sparse(-(Kl*P_inc+Ti)*c_inc);
 
 %% 判断矩阵KPT是否病态
@@ -66,16 +66,20 @@ u(r)=P_R*c_TR;
 u(u==0) = sol(1:end-2*modes);
 
 %% 能量检验
-uI = P_inc*c_inc;
+uI = P_inc;
 ul = P_L*c_RE;
 ur = P_R*c_TR;
-tI = T_inc*c_inc;
+tI = T_inc;
 tl = T_L*c_RE;
 tr = T_R*c_TR;
 
-eIN = sum(abs(uI.*tI));
-eOUT = sum(ur.*tr)+sum(ur.*tr);
+eIN = sum(uI.*tI);
+eOUT = sum(ur.*tr)+sum(ul.*tl);
 
+% eIN = sum(abs(uI.*tI));
+% eOUT = sum(abs(ur.*tr))+sum(abs(ul.*tl));
+energy_ratio= eOUT/eIN;
+fprintf('输入/输出能量比为 %f\n',energy_ratio)
 % energyIn = uI
 % energyOut = 
 %% 绘画出上表面的位移

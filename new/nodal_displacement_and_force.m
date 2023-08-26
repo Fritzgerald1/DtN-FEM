@@ -20,66 +20,73 @@ A = Amp(:,n); % 第n阶模态的幅值系数
 
 u =  E * diag([k, k, -q, q].*1i) * A .* exp(1i*k*x);
 v =  E * diag([p, -p k k].*1i) * A .* exp(1i*k*x);
-% u = imag(u); v = real(v);
+% u = -imag(u); v = real(v);
 
-Ux = cos(alpha)*u + sin(alpha)*v;
-Uy = sin(alpha)*u + cos(alpha)*v;
+u = cosd(alpha)*u + sind(alpha)*v;
+v = -sind(alpha)*u + cosd(alpha)*v;
+
+% t11 = E * diag([(lambda*(-p^2-k^2)-2*mu*k^2)*[1 1], 2*mu*q*k*[1 -1]]) * A .* exp(1i*k*x) .*dy;
+% t12 = E * diag([2*mu*k*p*[-1 1], mu*(q^2-k^2)*[1 1]]) * A .* exp(1i*k*x) .*dy;
+% t22 = E * diag([(lambda*(-p^2-k^2)-2*mu*p^2)*[1 1], 2*mu*k*q*[-1 1]]) * A .* exp(1i*k*x) .*dy;
 
 t11 = E * diag([mu*(2*p^2-q^2-k^2)*[1 1], 2*mu*q*k*[1 -1]]) * A .* exp(1i*k*x) .*dy;
 t12 = E * diag([2*mu*k*p*[-1 1], mu*(q^2-k^2)*[1 1]]) * A .* exp(1i*k*x) .*dy;
 t22 = E * diag([-mu*(q^2-k^2)*[1 1], 2*mu*k*q*[-1 1]]) * A .* exp(1i*k*x) .*dy;
-% t11 = real(t11); t12 = imag(t12); t22 = real(t22); 
-tx = t11+t12;
-ty = t22+t12;
+% t11 = real(t11); t12 = -imag(t12); t22 = real(t22); 
+tx = t11;
+ty = t12;
 
-% Mx = diag([1i*mu*k*(2*p^2-q^2-k^2-2*k*p), 1i*mu*k*(2*p^2-q^2-k^2+2*k*p), 1i*mu*k*(q^2-k^2+2*k*q), 1i*mu*k*(q^2-k^2-2*k*q)]);
-% My = diag([-1i*mu*p*(2*k*p+(q^2-k^2)), -1i*mu*p*(2*k*p-(q^2-k^2)), -1i*mu*q*(2*q*k-(q^2-k^2)),  1i*mu*q*(2*q*k+(q^2-k^2))]);
-% tx = E * Mx * A .* exp(1i*k*x);
-% ty = E * My * A .* exp(1i*k*x);
-% tx = real(tx); ty = real(ty);
+tx = cosd(alpha)*tx + sind(alpha)*ty;
+ty = -sind(alpha)*tx + cosd(alpha)*ty;
 
-Tx = cos(alpha)*tx + sin(alpha)*ty;
-Ty = -sin(alpha)*tx + cos(alpha)*ty;
-
-% 合并x和y的位移/力
-tmpU = [Ux,Uy]';
-U = tmpU(:);
-
-tmpT = [Tx,Ty]';
-T = tmpT(:);
-
+tmpU = [u,v]'; U = tmpU(:); % 合并x和y的位移
+tmpT = [tx,ty]'; T = tmpT(:); % 合并x和y的力
 %% 绘图检验
+%{
+
+figure(Position=[263,382,1106,420])
+[yi,I] = sort(y);
+y1 = yi./max(yi);
 % 位移
-% figure
-% subplot(1,2,1)
-% [y1,I] = sort(y);
-% plot(u(I),y1)
-% grid on
-% hold on
-% plot(v(I),y1,'--')
-% legend('u','v')
-% hold off
-% 
-% % 外力
-% subplot(1,2,2)
-% [y1,I] = sort(y);
-% plot(tx(I),y1)
-% grid on
-% hold on
-% plot(ty(I),y1,'--')
-% legend('tx','ty')
-% sgtitle(['第' num2str(n) '阶模态'])
-% hold off
-% 
-% % 应力
-% figure
-% [y1,I] = sort(y);
-% plot(t11(I),y1)
-% grid on
-% hold on
-% plot(t12(I),y1,'--')
-% plot(t22(I),y1,'.-')
-% legend('t11','t12','t22')
-% sgtitle(['第' num2str(n) '阶模态'])
-% hold off
+
+ax1 = subplot(1,2,1);
+plot(u(I)./max(abs([u;v])),y1,'LineWidth',1)
+axis([-1.1 1.1 -1.1 1.1])
+grid on
+hold on
+plot(v(I)./max(abs([u;v])),y1,'--','LineWidth',1)
+legend('u','v')
+ax1.XAxisLocation='origin';ax1.YAxisLocation='origin';
+hold off
+
+% 外力
+ax2 = subplot(1,2,2);
+plot(tx(I)./max(abs([tx;ty])),y1,'LineWidth',1)
+axis([-1.1 1.1 -1.1 1.1])
+grid on
+hold on
+plot(ty(I)./max(abs([tx;ty])),y1,'--','LineWidth',1)
+legend('tx','ty')
+ax2.XAxisLocation='origin';ax2.YAxisLocation='origin';
+
+str_title = sprintf('第%d阶模态\n k = %.0fm^{-1},  f = %.2fMHz',n,k,f/1e6);
+sgtitle(str_title)
+hold off
+
+% 应力
+figure(Position=[263,382,1106,420])
+[y1,I] = sort(y);
+plot(t11(I),y1,'LineWidth',1)
+grid on
+hold on
+plot(t12(I),y1,'--','LineWidth',1)
+plot(t22(I),y1,'.-','LineWidth',1)
+legend('t11','t12','t22')
+ax = gca;
+ax.XAxisLocation='origin';ax.YAxisLocation='origin';
+str_title = sprintf('第%d阶模态\n k = %.0fm^{-1},  f = %.2fMHz',n,k,f/1e6);
+title(str_title)
+hold off
+
+%}
 end

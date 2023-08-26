@@ -46,6 +46,6 @@ if nargout == 3
 	varargout{1}=flag;
 	
 	V = null(M);
-	V = V(:,1)/V(1,1);
+	% V = V(:,1)/V(1,1);
 	varargout{2} = V;
 end
