@@ -17,7 +17,9 @@ y = Coordinate(bnd,2);
 
 E = [exp(1i*p*y) exp(-1i*p*y) exp(1i*q*y) exp(-1i*q*y)];
 A = Amp(:,n); % 第n阶模态的幅值系数
+% A1 = A(1);A2 = A(2);A3 = A(3);A4 = A(4);
 
+% u = A1*1i*k*exp(1i*p*x)+A2*1i*k*exp(-1i*p*x)+A3*1i*(-q)*exp(1i*q*x)+A4*1i*(q)*exp(-1i*q*x);
 u =  E * diag([k, k, -q, q].*1i) * A .* exp(1i*k*x);
 v =  E * diag([p, -p k k].*1i) * A .* exp(1i*k*x);
 % u = -imag(u); v = real(v);
@@ -47,38 +49,38 @@ ty = -sind(alpha)*tx + cosd(alpha)*ty;
 
 %% 绘图检验
 %{
-% % 下表面
-% figure(1)
-% x = linspace(0,15e-3,1000);
-% x = x';
-% y = .5e-3*ones(size(x));
-% 
-% % 下表面位移
-% E = [exp(1i*p*y) exp(-1i*p*y) exp(1i*q*y) exp(-1i*q*y)];
-% A = Amp(:,n); % 第n阶模态的幅值系数
-% u =  E * diag([k, k, -q, q].*1i) * A .* exp(1i*k*x);
-% v =  E * diag([p, -p k k].*1i) * A .* exp(1i*k*x);
-% plot(x,u,'LineWidth',1)
-% hold on
-% plot(x,v,'--','LineWidth',1)
-% hold off
-%}
+% 下表面
+figure()
+x = linspace(0,15e-3,1000);
+x = x';
+y = .5e-3*ones(size(x));
+
+% 下表面位移
+E = [exp(1i*p*y) exp(-1i*p*y) exp(1i*q*y) exp(-1i*q*y)];
+A = Amp(:,n); % 第n阶模态的幅值系数
+u =  E * diag([k, k, -q, q].*1i) * A .* exp(1i*k*x);
+v =  E * diag([p, -p k k].*1i) * A .* exp(1i*k*x);
+plot(x,u,'LineWidth',1)
+hold on
+plot(x,v,'--','LineWidth',1)
+hold off
+legend('u','v')
 
 
-% figure(Position=[263,382,1106,420])
-% [yi,I] = sort(y);
-% % y1 = yi./max(yi);
-% % 位移
-% 
-% ax1 = subplot(1,2,1);
-% plot(u(I),yi,'LineWidth',1)
-% % axis([-1.1 1.1 -1.1 1.1])
-% grid on
-% hold on
-% plot(v(I),yi,'--','LineWidth',1)
-% legend('u','v')
-% ax1.XAxisLocation='origin';ax1.YAxisLocation='origin';
-% hold off
+figure(Position=[263,382,1106,420])
+[yi,I] = sort(y);
+% y1 = yi./max(yi);
+% 位移
+
+ax1 = subplot(1,2,1);
+plot(u(I),yi,'LineWidth',1)
+% axis([-1.1 1.1 -1.1 1.1])
+grid on
+hold on
+plot(v(I),yi,'--','LineWidth',1)
+legend('u','v')
+ax1.XAxisLocation='origin';ax1.YAxisLocation='origin';
+hold off
 
 % % 外力
 % ax2 = subplot(1,2,2);

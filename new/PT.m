@@ -32,18 +32,45 @@ u(l) = P_inc*c_inc;
 u(r) = P_R*c_TR;
 u(isnan(u)) = sol;
 %% 绘画出上表面的位移
-top = sort([2*bnd_T-1;2*bnd_T]);
-u_T = u(top);
+bottom = sort([2*bnd_B-1;2*bnd_B]);
+u_T = u(bottom);
 u_Tx = u_T(1:2:end);
 u_Ty = u_T(2:2:end);
 
 figure(Position=[263,382,1106,420])
 subplot(2,1,1)
 px = Coordinate(bnd_T,1);
-plot(px,u_Tx,'b.')
+[px1,I] = sort(px);
+u_Tx = u_Tx(I);
+u_Ty = u_Ty(I);
+plot(px1,real(u_Tx),'b-',LineWidth=1.5)
+hold on
+plot(px1,imag(u_Tx),'b-.')
+hold off
 title('u')
+legend('real','image')
 subplot(2,1,2)
-plot(px,u_Ty,'r.')
+plot(px1,real(u_Ty),'r-',LineWidth=1.5)
+hold on
+plot(px1,imag(u_Ty),'r-.')
+hold off
 title('v')
+legend('real','image')
 
-% end
+
+% plotWave(1.5e-3,Coordinate,u)
+
+
+function plotWave(x,Coordinate,u)
+X = Coordinate(:,1);
+bnd = find(X==x);
+uB = u(bnd);
+U = uB(1:2:end);
+V = uB(2:2:end);
+py = Coordinate(bnd,2);
+
+plot(real(U),py,'b-',LineWidth=1.5);
+hold on
+plot(imag(U),py,'b-.')
+hold off
+end

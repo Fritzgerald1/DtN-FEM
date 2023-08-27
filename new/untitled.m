@@ -1,25 +1,29 @@
-%% 重新排序刚度矩阵Kg，使得位移和应力顺序为[u0;uL;uR]和[f0;tL;tR]
+x=15e-5;
 
-% 测试是否交换准确
-Kg = cell(2*Nnode);
-for i = 1:2*Nnode
-	for j =1:2*Nnode
-		Kg{i,j}=[i,j];
-	end
-end
-%}
-L = bnd_L;
-R = bnd_R;
-% L = bnd_401; % 左边界节点号
-% R = bnd_501; % 右边界节点号
-l = sort([2*L-1;2*L]); % 左边界节点的行号
-r = sort([2*R-1;2*R]); % 右边界节点的行号
-o = 1:2*Nnode; 
-o([l;r])=[]; % 非左右边界节点的行号
+X = Coordinate(:,1);
+bnd_node = find(X==x);
+bnd = sort([2*bnd_node-1;2*bnd_node]);
 
-l = l';
-r = r';
-o = o';
-Ko = [Kg(o,o);Kg(l,o);Kg(r,o)];
-Kl = [Kg(o,l);Kg(l,l);Kg(r,l)];
-Kr = [Kg(o,r);Kg(l,r);Kg(r,r)];
+uB = u(bnd);
+U = uB(1:2:end);
+V = uB(2:2:end);
+py = Coordinate(bnd_node,2);
+[py1,I] = sort(py);
+U = U(I);
+V = V(I);
+
+
+figure
+subplot(1,2,1)
+plot(real(U),py1,'b-',LineWidth=1.5);
+hold on
+plot(imag(U),py1,'b-.')
+hold off
+subtitle('u1')
+
+subplot(1,2,2)
+plot(real(V),py1,'b-',LineWidth=1.5);
+hold on
+plot(imag(V),py1,'b-.')
+hold off
+subtitle('u2')
