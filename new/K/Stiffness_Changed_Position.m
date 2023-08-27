@@ -3,6 +3,7 @@ function [Ko,Kl,Kr,l,r,o] = Stiffness_Changed_Position(Kg,bnd_L,bnd_R,Nnode)
 
 %{
 % 测试是否交换准确
+Nnode = 8;
 Kg = cell(2*Nnode);
 for i = 1:2*Nnode
 	for j =1:2*Nnode

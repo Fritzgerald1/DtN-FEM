@@ -2,8 +2,8 @@ function [K,M] = Stiffness_Mass_matrix( Nnode,Nelement,Ielement,Coordinate,lambd
 E = mu*(2*mu+3*lambda)/(mu+lambda);
 v = lambda/(2*(mu+lambda));
 
-K = spalloc(2*Nnode,2*Nnode,1e4);
-M = spalloc(2*Nnode,2*Nnode,1e4);
+K = zeros(2*Nnode,2*Nnode);
+M = zeros(2*Nnode,2*Nnode);
 K1 = zeros(16,16,Nelement);
 M1 = zeros(16,16,Nelement);
 
